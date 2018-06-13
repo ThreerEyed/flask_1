@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{#{% super() %}#}
+{% block title %}
+    首 页
+{% endblock %}
+
+<body>
+{% block content %}
+
+    <h2>{{ path }}</h2>
+    <h2>{{ name }}</h2>
+    <h2>{{ id }}</h2>
+    <h2>欢迎欢迎，热烈欢迎</h2>
+    <form action="" method="post">
+    <label for="username">姓名 :</label>
+    <input type="text" name="username">
+    <input type="text" name="username">
+    <input type="submit" value="提交">
+    </form>
+
+{% endblock %}
+</body>

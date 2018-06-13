@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    列表
+{% endblock %}
+{% block extcss %}
+    <link rel="stylesheet" href="/static/css/common.css">
+{% endblock %}
+
+{% block content %}
+    {% if stus.all() %}
+    <table>
+        <tr>
+            <th>id</th>
+            <th>姓名</th>
+            <th>芳龄</th>
+            <th>班级名称</th>
+            <th>操作</th>
+        </tr>
+        {% for stu in stus %}
+        <tr>
+            <td style="color: blue">{{ stu.s_id }}</td>
+            <td>{{ stu.s_name }}</td>
+            <td style="color: red">{{ stu.s_age }}</td>
+            <td style="color: green">{{ stu.grade.g_name }}</td>
+            <td><a href="/user/edit_stu/?id={{ stu.s_id }}">编辑</a>
+                <span>|</span>
+                <a href="/user/delete_stu/?id={{ stu.s_id }}">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        没有该班级的学生信息
+    {% endif %}
+    <div>
+        <a href="/user/grade_all/">返回到班级列表</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    分 数
+{% endblock %}
+
+{% block extcss %}
+{% endblock %}
+
+{% block content %}
+    {{ scores }}
+<br>
+<ul>
+    {% for score in scores %}
+        {% if loop.first %}
+            <li style="color: red;">{{ score }}</li>
+        {% elif loop.last %}
+            <li style="color: green;">{{ score }}</li>
+        {% elif loop.index == 3 %}
+            <li style="color: blue;">{{ score }}</li>
+        {% else %}
+            <li>{{ score }}</li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block extjs %}
+{% endblock %}

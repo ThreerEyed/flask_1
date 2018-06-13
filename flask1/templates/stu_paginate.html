@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    分页页面
+{% endblock %}
+
+{% block content %}
+    <table>
+        {% for stu in stus %}
+        <tr>
+            <th>id</th>
+            <th>姓名</th>
+            <th>年龄</th>
+        </tr>
+        <tr>
+            <td style="color: red">{{ stu.s_id }}</td>
+            <td>{{ stu.s_name }}</td>
+            <td style="color: blue">{{ stu.s_age }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+        <br>
+{#        {{ paginate.has_next }}#}
+{#        {{ paginate.next_num }}#}
+        总页数: {{ paginate.pages }}
+        <span> | </span>
+        当前第{{ paginate.page }}页
+        <span> | </span>
+        {% if paginate.has_prev %}
+            <a href="/user/paginate/?page={{ paginate.prev_num }}">上一页</a>
+            <span> | </span>
+        {% endif %}
+        {% for i in paginate.iter_pages() %}
+            {{ i }}
+        {% endfor %}
+        {% if paginate.has_next %}
+            <a href="/user/paginate/?page={{ paginate.next_num }}">下一页</a>
+            <span> | </span>
+        {% endif %}
+
+{% endblock %}

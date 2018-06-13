@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    修改页面
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        <div>
+            <input type="hidden" value="{{ g_id }}">
+            <input type="text" name="stu_name" placeholder="请输入姓名">
+            <input type="text" name="stu_age" placeholder="请输入年龄">
+        </div>
+        <input type="submit" value="确定">
+        <a href="/user/grade_all/">返回班级页面</a>
+    </form>
+{% endblock %}

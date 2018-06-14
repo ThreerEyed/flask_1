@@ -23,9 +23,14 @@
             <td>{{ stu.s_name }}</td>
             <td style="color: red">{{ stu.s_age }}</td>
             <td style="color: green">{{ stu.grade.g_name }}</td>
-            <td><a href="/user/edit_stu/?id={{ stu.s_id }}">编辑</a>
+            <td>
+                <a href="/user/edit_stu/?id={{ stu.s_id }}">编辑</a>
                 <span>|</span>
                 <a href="/user/delete_stu/?id={{ stu.s_id }}">删除</a>
+                <span>|</span>
+                <a href="/user/add_course/?s_id={{ stu.s_id }}">添加课程</a>
+                <span>|</span>
+                <a href="{{ url_for('user.add_course') }}?s_id={{ stu.s_id }}">查看课程</a>
             </td>
         </tr>
         {% endfor %}

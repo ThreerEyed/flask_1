@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    选课页面
+{% endblock %}
+
+{% block content %}
+
+    <table>
+        <tr>
+            <td>课程ID</td>
+            <td>课程名称</td>
+            <td>操作</td>
+        </tr>
+        {% for course in s_courses %}
+        <tr>
+            <td>{{ course.c_id }}</td>
+            <td>{{ course.c_name }}</td>
+            <td><a href="/user/delete_course/?c_id={{ course.c_id }}&s_id={{ s_id }}">删除</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <form action="" method="post">
+        <label>添加课程 :</label>
+        <select name="course_id" id="">
+            {% for course in courses %}
+            <option value="{{ course.c_id }}">{{ course.c_name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="提交">
+    </form>
+{% endblock %}

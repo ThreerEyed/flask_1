@@ -2,9 +2,10 @@ import random
 
 from flask import Blueprint, render_template, make_response, request, session, redirect, url_for
 
-from user.models import db, Student, User, Grade
+from user.models import db, Student, Grade, Course, User
 
 # from utils.functions import is_login
+from utils.decorator import is_login
 
 user_blueprint = Blueprint('user', __name__)
 
@@ -123,9 +124,9 @@ def delete_stu():
     return redirect(url_for('user.stus_list', g_id=g_id))
 
 
-
 # 学生列表
 @user_blueprint.route('/stus_list/', methods=['GET', 'POST'])
+@is_login
 def stus_list():
 
     if request.method == 'GET':
@@ -201,7 +202,7 @@ def grade_all():
     if request.method == 'POST':
         grade = Grade()
         grade.g_name = request.form.get('grade_name')
-        grade.g_des = request.form.get('grade_des')
+        grade.g_desc = request.form.get('grade_des')
 
         db.session.add(grade)
         db.session.commit()
@@ -228,6 +229,51 @@ def create_stu_by_grade():
         return render_template('edit_stu.html')
 
 
+# 添加学生的课程
+@user_blueprint.route('/add_course/', methods=['GET', 'POST'])
+def add_course():
+
+    if request.method == 'GET':
+        courses = Course.query.all()
+        s_id = request.args.get('s_id')
+        stu = Student.query.filter_by(s_id=s_id).first()
+        s_courses = stu.course
+        # s_courses = Course.query.filter_by(c_id=)
+        return render_template('course.html', courses=courses, s_courses=s_courses, s_id=s_id)
+
+    if request.method == 'POST':
+        s_id = request.args.get('s_id')
+        course_id = request.form.get('course_id')
+
+        student = Student.query.get(s_id)
+        g_id = student.grade.g_id
+        course = Course.query.get(course_id)
+        course.students.append(student)
+
+        db.session.add(course)
+        db.session.commit()
+
+        return redirect(url_for('user.stus_list', g_id=g_id))
+
+
+# 删除学生的课程
+@user_blueprint.route('/delete_course/', methods=['GET', 'POST'])
+def delete_course():
+    if request.method == 'GET':
+        s_id = request.args.get('s_id')
+        c_id = request.args.get('c_id')
+
+        # courses = Course.query.all()
+        stu = Student.query.get(s_id)
+        g_id = stu.grade.g_id
+        s_courses = stu.course
+        course = Course.query.filter_by(c_id=c_id).first()
+
+        s_courses.remove(course)
+        db.session.commit()
+        return redirect(url_for('user.stus_list', g_id=g_id))
+
+
 # 分页
 @user_blueprint.route('/paginate/', methods=['GET', 'POST'])
 def stu_paginate():
@@ -252,10 +298,14 @@ def user_register():
         cpwd = request.form.get('cpwd')
         email = request.form.get('email')
 
+        if not all([username, pwd, cpwd, email]):
+            msg = '请填写完整的注册信息'
+            return render_template('register.html', msg=msg)
+
         if User.query.filter_by(username=username).first():
             msg = '该用户已经存在'
             return render_template('register.html', msg=msg)
-        user = User()
+        user = User(username, pwd)
         user.username = username
         user.password = cpwd
         user.email = email
@@ -275,9 +325,10 @@ def user_login():
         username = request.form.get('username')
         pwd = request.form.get('pwd')
 
-        if User.query.filter_by(username=username).all():
-            if User.query.filter_by(password=pwd).all():
+        if User.query.filter_by(username=username).first():
+            if User.query.filter_by(password=pwd).first():
                 user = User.query.filter_by(password=pwd).all()[0]
+                session['user_id'] = user.id
                 myres = redirect(url_for('user.stu_scores'))
                 res = make_response(myres, 302)
                 ticket = ''

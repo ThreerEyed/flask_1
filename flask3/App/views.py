@@ -71,7 +71,7 @@ def login():
 
         if User.query.filter_by(u_name=username):
             if User.query.filter_by(u_pass=password):
-                user = User.query.filter_by(u_name=username)
+                user = User.query.filter_by(u_name=username).first()
                 session['user_id'] = user.u_id
                 return render_template('index.html')
             else:
@@ -88,3 +88,21 @@ def index():
     if request.method == 'GET':
 
         return render_template('index.html')
+
+
+@user_blueprint.route('/head/', methods=['GET', 'POST'])
+def head():
+    if request.method == 'GET':
+        return render_template('head.html')
+
+
+@user_blueprint.route('/left/', methods=['GET', 'POST'])
+def left():
+    if request.method == 'GET':
+        return render_template('left.html')
+
+
+@user_blueprint.route('/grade/', methods=['GET', 'POST'])
+def grade():
+    if request.method == 'GET':
+        return render_template('grade.html')

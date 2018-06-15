@@ -1,12 +1,11 @@
 import os
 
 import redis
-from flask import Flask, session, redirect, url_for
-from flask_session import Session
+from flask import Flask
 
-from user.models import db
 from user.stu_views import stu_blueprint
 from user.views import user_blueprint
+from utils.ext_init import ext_init
 
 
 def create_app():
@@ -38,9 +37,6 @@ def create_app():
     app.register_blueprint(blueprint=user_blueprint, url_prefix='/user')
     app.register_blueprint(blueprint=stu_blueprint, url_prefix='/stu')
 
-    se = Session()
-    se.init_app(app=app)
-    db.init_app(app=app)
-
+    ext_init(app)
     return app
 

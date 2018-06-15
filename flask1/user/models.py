@@ -52,6 +52,13 @@ class Student(db.Model):
     # def __init__(self, name, age):
     #     self.s_name = name
     #     self.s_age = age
+    def to_dict(self):
+        return {
+            's_id': self.s_id,
+            's_name': self.s_name,
+            's_age': self.s_age,
+            'grades': self.grades
+        }
 
 
 # 班级
@@ -83,6 +90,15 @@ class Course(db.Model):
                                backref='course')
 
     __tablename__ = 'course'
+
+    def to_dict(self):
+
+        return {
+            'c_id': self.c_id,
+            'c_name': self.c_name,
+            'c_create_time': self.c_create_time.strftime('%Y-%m-%d-%H-%M-%S'),
+            'students': [stu.to_dict() for stu in self.students]
+        }
 
 
 # 用户

@@ -1,11 +1,13 @@
 import random
 
 from flask import Blueprint, render_template, make_response, request, session, redirect, url_for
+from flask_restful import Resource
 
 from user.models import db, Student, Grade, Course, User
 
 # from utils.functions import is_login
 from utils.decorator import is_login
+from utils.ext_init import api
 
 user_blueprint = Blueprint('user', __name__)
 
@@ -125,14 +127,14 @@ def delete_stu():
 
 
 # 学生列表
-@user_blueprint.route('/stus_list/', methods=['GET', 'POST'])
+@user_blueprint.route('/stus_list/<int:id>/', methods=['GET', 'POST'])
 @is_login
-def stus_list():
+def stus_list(id):
 
     if request.method == 'GET':
-        g_id = request.args.get('g_id')
+        # g_id = request.args.get('g_id')
         # 方式一
-        stus = Student.query.filter_by(grades=g_id)
+        stus = Student.query.filter_by(grades=id)
         # 方式二
         # sql = 'select * from student'
         # stus = db.session.execute(sql)
@@ -230,16 +232,16 @@ def create_stu_by_grade():
 
 
 # 添加学生的课程
-@user_blueprint.route('/add_course/', methods=['GET', 'POST'])
-def add_course():
+@user_blueprint.route('/add_course/<int:id>/', methods=['GET', 'POST'])
+def add_course(id):
 
     if request.method == 'GET':
         courses = Course.query.all()
-        s_id = request.args.get('s_id')
-        stu = Student.query.filter_by(s_id=s_id).first()
+        # s_id = request.args.get(id)
+        stu = Student.query.filter_by(s_id=id).first()
         s_courses = stu.course
         # s_courses = Course.query.filter_by(c_id=)
-        return render_template('course.html', courses=courses, s_courses=s_courses, s_id=s_id)
+        return render_template('course.html', courses=courses, s_courses=s_courses, s_id=id)
 
     if request.method == 'POST':
         s_id = request.args.get('s_id')
@@ -345,3 +347,41 @@ def user_login():
         else:
             msg = '该用户没有注册，请前去注册'
             return render_template('login.html', msg=msg)
+
+
+class CreateCourse(Resource):
+
+    def get(self, id):
+        courses = Course.query.all()
+        # s_id = request.args.get(id)
+        stu = Student.query.filter_by(s_id=id).first()
+        s_courses = stu.course
+        # s_courses = Course.query.filter_by(c_id=)
+        # return render_template('course.html', courses=courses, s_courses=s_courses, s_id=id)
+        return {
+            'courses': [course.to_dict() for course in courses],
+            's_courses': [s_course.to_dict() for s_course in s_courses]
+        }
+
+    def post(self):
+        s_id = request.args.get('s_id')
+        course_id = request.form.get('course_id')
+
+        student = Student.query.get(s_id)
+        g_id = student.grade.g_id
+        course = Course.query.get(course_id)
+        course.students.append(student)
+
+        db.session.add(course)
+        db.session.commit()
+
+        # return redirect(url_for('user.stus_list', g_id=g_id))
+        return {
+            'g_id': g_id
+        }
+
+    def delete(self):
+        pass
+
+
+api.add_resource(CreateCourse, '/api/add_course/<int:id>/')

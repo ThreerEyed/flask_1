@@ -8,10 +8,10 @@
 <meta name="generator" content="" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-<link href="css/haiersoft.css" rel="stylesheet" type="text/css" media="screen,print" />
-<link href="css/print.css" rel="stylesheet" type="text/css"  media="print" />
-<script src="js/jquery-1.10.1.min.js"></script>
-<script src="js/side.js" type="text/javascript"></script>
+<link href="/static/css/haiersoft.css" rel="stylesheet" type="text/css" media="screen,print" />
+<link href="/static/css/print.css" rel="stylesheet" type="text/css"  media="print" />
+<script src="/static/js/jquery-1.10.1.min.js"></script>
+<script src="/static/js/side.js" type="text/javascript"></script>
 
 </head>
 
@@ -39,20 +39,21 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
 <form action="" method="">
 <table cellpadding="0" cellspacing="0">
 <tr>
-<th>员工姓名 <span class="f_cB">*</span></th>
-<td><div class="txtbox floatL" style="width:100px;"><input name="" type="text" size="5" value="张三"></div></td>
+<th>学生姓名 <span class="f_cB">*</span></th>
+<td><div class="txtbox floatL" style="width:100px;"><input name="s_name" type="text" size="5"></div></td>
 </tr>
 
 <tr>
 <th>性别 <span class="f_cB">*</span></th>
 <td><!-- selectbox -->
 <div class="selectbox" style="width:230px;">
-<dl class="select">
-<dt>请选择</dt>
-<dd><ul>
-<li><a href="#"> 男 </a></li>
-<li><a href="#"> 女 </a></li>
-</ul></dd></dl>
+<div class="select">
+
+    <select name="s_sex" id="">
+        <option value="1">男</option>
+        <option value="0">女</option>
+    </select>
+</div>
 </div>
 <!-- /selectbox --></td>
 </tr>
@@ -60,20 +61,37 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
 <th>所属班级<span class="f_cB">*</span></th>
 <td><!-- selectbox -->
 <div class="selectbox" style="width:230px;">
-<dl class="select">
-<dt>python2班</dt>
-<dd><ul>
-<li><a href="#">选项A</a></li>
-<li><a href="#">选项B</a></li>
-<li><a href="#">选项C</a></li>
-<li><a href="#">选项D</a></li>
-<li><a href="#">选项E</a></li>
-</ul></dd></dl>
+<div class="select">
+
+    <select name="grade_name" id="">
+        {% for grade in grades %}
+        <option name="grade_name" value="">{{ grade.g_name }}</option>
+        {% endfor %}
+    </select>
+</div>
 </div>
 </td>
 </tr>
 
+<tr>
+    <th>
+        上传头像
+    </th>
+    <td>
+    <input type="file" name="s_img">
+    </td>
+</tr>
+<tr>
+    <th>
+        生 日
+    </th>
+    <td>
+    <input type="date" name="s_birth">
+    </td>
+</tr>
+
 </table>
+
 <div id="BtmBtn">
 <div class="btn_box floatR"><input name="" type="submit" value="提交"></div>
 </div>

@@ -1,7 +1,9 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session
+from flask_restful import Resource
 
-from App.models import db, User
+from App.models import db, User, Grade, Student
 from utils.common import is_login
+# from utils.ext_init import api
 
 user_blueprint = Blueprint('user', __name__)
 
@@ -73,13 +75,29 @@ def login():
             if User.query.filter_by(u_pass=password):
                 user = User.query.filter_by(u_name=username).first()
                 session['user_id'] = user.u_id
-                return render_template('index.html')
+                session['username'] = user.u_name
+                return redirect(url_for('user.index'), code=302)
             else:
                 msg = '用户名或密码错误'
                 return render_template('login.html', msg=msg)
         else:
             msg = '用户名或密码错误'
             return render_template('login.html', msg=msg)
+
+
+# 退出登录
+@user_blueprint.route('/logout/')
+def logout():
+    session['user_id'] = ''
+    return redirect(url_for('user.login'))
+
+
+# 修改密码
+@user_blueprint.route('/changepwd/', methods=['GET', 'POST'])
+def changepwd():
+    if request.method == 'GET':
+        username = session.get('username')
+        return render_template('changepwd.html', username=username)
 
 
 @user_blueprint.route('/index/', methods=['GET', 'POST'])
@@ -93,16 +111,119 @@ def index():
 @user_blueprint.route('/head/', methods=['GET', 'POST'])
 def head():
     if request.method == 'GET':
-        return render_template('head.html')
+        username = session.get('username')
+        return render_template('head.html', username=username)
 
 
+# 左页面
 @user_blueprint.route('/left/', methods=['GET', 'POST'])
 def left():
     if request.method == 'GET':
         return render_template('left.html')
 
 
+# 班级列表
 @user_blueprint.route('/grade/', methods=['GET', 'POST'])
 def grade():
     if request.method == 'GET':
-        return render_template('grade.html')
+        grades = Grade.query.all()
+        return render_template('grade.html', grades=grades)
+
+
+# 添加班级
+@user_blueprint.route('/add_grade/', methods=['GET', 'POST'])
+def add_grade():
+    if request.method == 'GET':
+        return render_template('addgrade.html')
+
+    if request.method == 'POST':
+        grade_name = request.form.get('grade_name')
+
+        grade = Grade()
+        grade.g_name = grade_name
+
+        db.session.add(grade)
+        db.session.commit()
+
+        return redirect(url_for('user.grade'))
+
+
+# 学生列表
+@user_blueprint.route('/student/', methods=['GET', 'POST'])
+def student():
+    if request.method == 'GET':
+        return render_template('student.html')
+
+
+# 添加学生
+@user_blueprint.route('/addstu/', methods=['GET', 'POST'])
+def addstu():
+    if request.method == 'GET':
+        grades = Grade.query.all()
+        return render_template('addstu.html', grades=grades)
+    if request.method == 'POST':
+
+        student_name = request.form.get('s_name')
+        student_sex = request.form.get('s_sex')
+        student_grade_name = request.form.get('grade_name')
+        student_img = request.form.get('')
+        student = Student()
+
+        pass
+
+
+# 角色列表
+@user_blueprint.route('/roles/', methods=['GET', 'POST'])
+def roles():
+    if request.method == 'GET':
+        return render_template('roles.html')
+
+
+# 添加角色
+@user_blueprint.route('/addroles/', methods=['GET', 'POST'])
+def addroles():
+    if request.method == 'GET':
+        return render_template('addroles.html')
+
+
+# 权限列表
+@user_blueprint.route('/permissions/', methods=['GET', 'POST'])
+def permissions():
+    if request.method == 'GET':
+        return render_template('permissions.html')
+
+
+# 添加权限
+@user_blueprint.route('/addpermission/', methods=['GET', 'POST'])
+def addpermission():
+    if request.method == 'GET':
+        return render_template('addpermission.html')
+
+
+# 用户列表
+@user_blueprint.route('/users/', methods=['GET', 'POST'])
+def users():
+    if request.method == 'GET':
+        return render_template('users.html')
+
+
+# 添加用户
+@user_blueprint.route('/add_edit/', methods=['GET', 'POST'])
+def add_edit():
+    if request.method == 'GET':
+        return render_template('add_edit.html')
+
+
+@user_blueprint.route('/main/', methods=['GET', 'POST'])
+def main():
+    if request.method == 'GET':
+        user_id = request.cookies.get('session')
+
+        return render_template('main.html')
+
+
+class Course(Resource):
+    pass
+
+
+# api.add_resource(CourseApi)

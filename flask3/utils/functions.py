@@ -1,11 +1,10 @@
 import os
 
 import redis
-from flask import Flask, session
-from flask_session import Session
+from flask import Flask
 
-from App.models import db
 from App.views import user_blueprint
+from utils.ext_init import ext_init
 
 
 def create_app():
@@ -19,6 +18,7 @@ def create_app():
     app.register_blueprint(blueprint=user_blueprint, url_prefix='/user')
 
     app.config['SESSION_TYPE'] = 'redis'
+    app.config['SECRET_KEY'] = '\x03\xe8\x97\xdb\x17<\xb7n\x94\xee\xdb\xa4\xfa\xeb\x93'  # os.urandom(20)
     app.config['SESSION_SECRET_KEY'] = 'secret'
     app.config['SESSION_KEY_PREFIX'] = 'flask'
     app.config['SESSION_REDIS'] = redis.Redis(host='127.0.0.1', port=6379)
@@ -26,9 +26,9 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@localhost:3306/flask3'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-    db.init_app(app=app)
-    Session(app)
+    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
+    ext_init(app)
     return app
 
 

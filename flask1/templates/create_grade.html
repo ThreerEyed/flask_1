@@ -28,7 +28,7 @@
                 <td>{{ grade.g_des }}</td>
                 <td>
                     <a href="/user/create_stu_by_grade/?g_id={{ grade.g_id }}">添加学生</a>
-                    <a href="/user/stus_list/?g_id={{ grade.g_id }}">查看学生</a>
+                    <a href="/user/stus_list/{{ grade.g_id }}/">查看学生</a>
                 </td>
             </tr>
         {% endfor %}

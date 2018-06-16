@@ -1,9 +1,10 @@
+import os
 from flask import Blueprint, request, render_template, redirect, url_for, session
 from flask_restful import Resource
+from werkzeug.utils import secure_filename
 
 from App.models import db, User, Grade, Student
 from utils.common import is_login
-# from utils.ext_init import api
 
 user_blueprint = Blueprint('user', __name__)
 
@@ -71,8 +72,11 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        if User.query.filter_by(u_name=username):
-            if User.query.filter_by(u_pass=password):
+        if not all([username, password]):
+            return render_template('login.html', msg='请输入用户名和密码')
+
+        if User.query.filter_by(u_name=username).first():
+            if User.query.filter_by(u_pass=password).first():
                 user = User.query.filter_by(u_name=username).first()
                 session['user_id'] = user.u_id
                 session['username'] = user.u_name
@@ -152,7 +156,8 @@ def add_grade():
 @user_blueprint.route('/student/', methods=['GET', 'POST'])
 def student():
     if request.method == 'GET':
-        return render_template('student.html')
+        students = Student.query.all()
+        return render_template('student.html', students=students)
 
 
 # 添加学生
@@ -161,15 +166,33 @@ def addstu():
     if request.method == 'GET':
         grades = Grade.query.all()
         return render_template('addstu.html', grades=grades)
-    if request.method == 'POST':
 
+    if request.method == 'POST':
         student_name = request.form.get('s_name')
         student_sex = request.form.get('s_sex')
+        student_s_birth = request.form.get('s_birth')
+        student_s_img = request.files.get('s_img').filename
         student_grade_name = request.form.get('grade_name')
-        student_img = request.form.get('')
+
         student = Student()
 
-        pass
+        f = request.files['s_img']
+        basepath = os.path.dirname(os.path.dirname(__file__))  # 当前文件所在路径
+        upload_path = os.path.join(basepath, 'static\icons', secure_filename(f.filename))  # 注意：没有的文件夹一定要先创建，不然会提示没有该路径
+        f.save(upload_path)
+
+        student.s_name = student_name
+        student.s_sex = int(student_sex)
+        student.s_grade_name = student_grade_name
+        student.s_img = student_s_img
+        student.s_birth = student_s_birth
+        grade = Grade.query.filter_by(g_name=student_grade_name).first()
+        student.grade_id = grade.g_id
+
+        db.session.add(student)
+        db.session.commit()
+
+        return redirect(url_for('user.student'))
 
 
 # 角色列表
@@ -227,3 +250,13 @@ class Course(Resource):
 
 
 # api.add_resource(CourseApi)
+
+@user_blueprint.route('/upload/', methods=['POST', 'GET'])
+def upload():
+    if request.method == 'POST':
+        f = request.files['file']
+        basepath = os.path.dirname(os.path.dirname(__file__))  # 当前文件所在路径
+        upload_path = os.path.join(basepath, 'media\icons',secure_filename(f.filename))  #注意：没有的文件夹一定要先创建，不然会提示没有该路径
+        f.save(upload_path)
+        return redirect(url_for('user.upload'))
+    return render_template('upload.html')

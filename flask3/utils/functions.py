@@ -14,7 +14,8 @@ def create_app():
     templates_dir = os.path.join(BASE_DIR, 'templates')
     app = Flask(__name__,
                 static_folder=static_dir,
-                template_folder=templates_dir)
+                template_folder=templates_dir,
+                )
     app.register_blueprint(blueprint=user_blueprint, url_prefix='/user')
 
     app.config['SESSION_TYPE'] = 'redis'

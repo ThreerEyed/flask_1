@@ -71,7 +71,9 @@ class Student(db.Model):
 
     s_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     s_name = db.Column(db.String(20), unique=True)
+    s_sex = db.Column(db.Boolean, default=0)
     s_create_time = db.Column(db.DateTime, default=datetime.now())
+    s_grade_name = db.Column(db.String(20), unique=True)
     s_img = db.Column(db.String(300))
     s_birth = db.Column(db.Date)
     grade_id = db.Column(db.Integer, db.ForeignKey('grade.g_id'), nullable=True)

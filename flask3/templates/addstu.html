@@ -36,7 +36,7 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
 </script>
 <div class="form_boxC">
 <p>"<span class="f_cB">*</span>"号为必填项目</p>
-<form action="" method="">
+<form action="" method="post" enctype="multipart/form-data">
 <table cellpadding="0" cellspacing="0">
 <tr>
 <th>学生姓名 <span class="f_cB">*</span></th>
@@ -65,7 +65,7 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
 
     <select name="grade_name" id="">
         {% for grade in grades %}
-        <option name="grade_name" value="">{{ grade.g_name }}</option>
+        <option value="{{ grade.g_name }}">{{ grade.g_name }}</option>
         {% endfor %}
     </select>
 </div>
@@ -78,7 +78,7 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
         上传头像
     </th>
     <td>
-    <input type="file" name="s_img">
+    <input type="file" name="s_img" value="s_img">
     </td>
 </tr>
 <tr>

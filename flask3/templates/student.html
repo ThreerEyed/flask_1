@@ -28,14 +28,20 @@
 <h2>学生信息列表</h2>
 <table cellpadding="0" cellspacing="0">
 <tr>
-<th>序号</th>
+<th>学生ID</th>
 <th>学生名称</th>
+<th>学生班级</th>
+<th>头像</th>
 <th>操作</th>
 </tr>
 <tr>
-<td>1</td>
-<td>蔡文姬</td>
+{% for student in students %}
+<td>{{ student.s_id }}</td>
+<td>{{ student.s_name }}</td>
+<td>{{ student.s_grade_name }}</td>
+<td><img src="/static/icons/timg.jpg" alt="头像" style="width: 40px; height: 40px"></td>
 <td><a href="p2.html">删除</a></td>
+{% endfor %}
 </tr>
 
 </table>

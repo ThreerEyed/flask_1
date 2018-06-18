@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
+# 用户
 class User(db.Model):
 
     u_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -24,6 +25,7 @@ ur = db.Table('ur',
               db.Column('r_id', db.Integer, db.ForeignKey('role.r_id'), primary_key=True))
 
 
+# 角色
 class Role(db.Model):
 
     r_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -43,6 +45,7 @@ rp = db.Table('rp',
               db.Column('p_id', db.Integer, db.ForeignKey('permission.p_id'), primary_key=True))
 
 
+# 权限
 class Permission(db.Model):
 
     p_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -57,6 +60,7 @@ class Permission(db.Model):
         self.p_english = p_english
 
 
+#班级
 class Grade(db.Model):
 
     g_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -67,15 +71,16 @@ class Grade(db.Model):
     __tablename__ = 'grade'
 
 
+# 学生
 class Student(db.Model):
 
     s_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     s_name = db.Column(db.String(20), unique=True)
     s_sex = db.Column(db.Boolean, default=0)
     s_create_time = db.Column(db.DateTime, default=datetime.now())
-    s_grade_name = db.Column(db.String(20), unique=True)
+    s_grade_name = db.Column(db.String(20))
     s_img = db.Column(db.String(300))
-    s_birth = db.Column(db.Date)
+    s_birth = db.Column(db.Date, nullable=True)
     grade_id = db.Column(db.Integer, db.ForeignKey('grade.g_id'), nullable=True)
 
     __tablename__ = 'student'

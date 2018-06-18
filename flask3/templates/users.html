@@ -33,19 +33,14 @@
 <th>权限</th>
 <th>操作</th>
 </tr>
+{% for user in users %}
 <tr>
-<td>1</td>
-<td>蔡文姬</td>
+<td>{{ user.u_id }}</td>
+<td>{{ user.u_name }}</td>
 <td>管理员</td>
 <td><a href="p2.html">编辑|删除</a></td>
 </tr>
-<tr>
-<td>2</td>
-<td>蔡文姬</td>
-<td>无</td>
-<td><a href="p2.html">编辑|删除</a></td>
-</tr>
-
+{% endfor %}
 </table>
 <p class="msg">共找到47条年度预算记录，当前显示从第1条至第10条</p>
 </div>

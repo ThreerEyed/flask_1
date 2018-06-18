@@ -34,23 +34,26 @@
 <th>头像</th>
 <th>操作</th>
 </tr>
-<tr>
 {% for student in students %}
+<tr>
 <td>{{ student.s_id }}</td>
 <td>{{ student.s_name }}</td>
 <td>{{ student.s_grade_name }}</td>
-<td><img src="/static/icons/timg.jpg" alt="头像" style="width: 40px; height: 40px"></td>
-<td><a href="p2.html">删除</a></td>
-{% endfor %}
+<td><img src="/static/icons/{{ student.s_img }}" alt="" style="width: 40px; height: 40px"></td>
+<td><a href="{{ url_for('user.del_stu', s_id=student.s_id) }}">删除</a></td>
 </tr>
+{% endfor %}
 
 </table>
 <p class="msg">共找到47条年度预算记录，当前显示从第1条至第10条</p>
 </div>
 
 <ul id="PageNum">
+<li>总页数: {{ paginate.pages }}</li>
 <li><a href="#">首页</a></li>
-<li><a href="#">上一页</a></li>
+{% if paginate.has_prev %}
+<li><a href="">上一页</a></li>
+{% endif %}
 <li><a href="#">1</a></li>
 <li><a href="#">2</a></li>
 <li><a href="#">3</a></li>

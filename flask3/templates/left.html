@@ -20,6 +20,8 @@
 					<img src="/static/img/coin01.png" />&nbsp;&nbsp;首页
 				</div></a>
 			<dl class="system_log">
+                {% for permission in user.role[0].permission %}
+                    {% if permission.p_name == '班级列表' %}
 				<dt>
 					<img class="icon1" src="/static/img/coin03.png" /><img class="icon2"
 						src="/static/img/coin04.png" /> 班级管理<img class="icon3"
@@ -31,13 +33,21 @@
 						src="/static/img/coin222.png" /><a class="cks" href="{{ url_for('user.grade') }}"
 						target="main">班级列表</a><img class="icon5" src="/static/img/coin21.png" />
 				</dd>
+                    {% endif %}
+                {% endfor %}
+                {% for permission in user.role[0].permission %}
+                    {% if permission.p_name == '添加班级' %}
 				<dd>
 					<img class="coin11" src="/static/img/coin111.png" /><img class="coin22"
 						src="/static/img/coin222.png" /><a class="cks" href="{{ url_for('user.add_grade') }}"
 						target="main">班级添加</a><img class="icon5" src="/static/img/coin21.png" />
 				</dd>
+                    {% endif %}
+                {% endfor %}
 			</dl>
 			<dl class="system_log">
+                {% for permission in user.role[0].permission %}
+                    {% if permission.p_name == '学生列表' %}
 				<dt>
 					<img class="icon1" src="/static/img/coin03.png" /><img class="icon2"
 						src="/static/img/coin04.png" /> 学生管理<img class="icon3"
@@ -49,6 +59,8 @@
 						src="/static/img/coin222.png" /><a class="cks" href="{{ url_for('user.student') }}"
 						target="main">学生列表</a><img class="icon5" src="/static/img/coin21.png" />
 				</dd>
+                    {% endif %}
+                {% endfor %}
 				<dd>
 					<img class="coin11" src="/static/img/coin111.png" /><img class="coin22"
 						src="/static/img/coin222.png" /><a class="cks" href="{{ url_for('user.addstu') }}"
@@ -56,6 +68,8 @@
 				</dd>
 			</dl>
 			<dl class="system_log">
+                {% for permission in user.role[0].permission %}
+                    {% if permission.p_name == '权限管理' %}
 				<dt>
 					<img class="icon1" src="/static/img/coin03.png" /><img class="icon2"
 						src="/static/img/coin04.png" />权限管理<img class="icon3"
@@ -82,8 +96,12 @@
 						src="/static/img/coin222.png" /><a class="cks" href="{{ url_for('user.addpermission') }}"
 						target="main">添加权限</a><img class="icon5" src="/static/img/coin21.png" />
 				</dd>
+                    {% endif %}
+                {% endfor %}
 			</dl>
 			<dl class="system_log">
+                {% for permission in user.role[0].permission %}
+                {% if permission.p_name == '用户管理' %}
 				<dt>
 					<img class="icon1" src="/static/img/coinL1.png" /><img class="icon2"
 						src="/static/img/coinL2.png" />用户管理<img class="icon3"
@@ -98,10 +116,12 @@
 				</dd>
 				<dd>
 					<img class="coin11" src="/static/img/coin111.png" /><img class="coin22"
-						src="/static/img/coin222.png" /><a href="{{ url_for('user.add_edit') }}"
+						src="/static/img/coin222.png" /><a href="{{ url_for('user.add_user') }}"
 						target="main" class="cks">添加用户</a><img class="icon5"
 						src="/static/img/coin21.png" />
 				</dd>
+                    {% endif %}
+                {% endfor %}
 			</dl>
 			<dl class="system_log">
 				<dt>

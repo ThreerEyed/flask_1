@@ -20,6 +20,7 @@
 					<img src="/static/img/coin01.png" />&nbsp;&nbsp;首页
 				</div></a>
 			<dl class="system_log">
+            {% if user.role %}
                 {% for permission in user.role[0].permission %}
                     {% if permission.p_name == '班级列表' %}
 				<dt>
@@ -46,6 +47,7 @@
                 {% endfor %}
 			</dl>
 			<dl class="system_log">
+
                 {% for permission in user.role[0].permission %}
                     {% if permission.p_name == '学生列表' %}
 				<dt>
@@ -122,6 +124,7 @@
 				</dd>
                     {% endif %}
                 {% endfor %}
+
 			</dl>
 			<dl class="system_log">
 				<dt>
@@ -142,6 +145,8 @@
 						class="icon5" src="/static/img/coin21.png" />
 				</dd>
 			</dl>
+        {% else %}
+        {% endif %}
 
 		</div>
 

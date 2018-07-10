@@ -60,7 +60,7 @@ class Permission(db.Model):
         self.p_english = p_english
 
 
-#班级
+# 班级
 class Grade(db.Model):
 
     g_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
